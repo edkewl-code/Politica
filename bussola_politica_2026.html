@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bússola Política: Eleições 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .btn-option {
+            transition: all 0.2s ease;
+        }
+        
+        .btn-option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        .btn-option:active {
+            transform: translateY(0);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9; 
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+
+        .color-pt { background-color: #dc2626; }
+        .color-pl { background-color: #1d4ed8; }
+        .color-novo { background-color: #ea580c; }
+        .color-psd { background-color: #0369a1; }
+        .color-avante { background-color: #0ea5e9; }
+        .color-prtb { background-color: #047857; }
+        .color-missao { background-color: #f59e0b; }
+        .color-democrata { background-color: #10b981; }
+        .color-dc { background-color: #0284c7; }
+        .color-pcb { background-color: #991b1b; }
+        .color-pstu { background-color: #b91c1c; }
+        .color-pco { background-color: #7f1d1d; }
+        .color-up { background-color: #000000; }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 sm:p-8">
+
+    <main class="w-full max-w-4xl bg-white rounded-3xl shadow-xl overflow-hidden relative" id="app-container">
+        
+        <!-- Tela de Início -->
+        <section id="intro-screen" class="p-8 md:p-16 text-center flex flex-col items-center justify-center min-h-[600px]">
+            <div class="mb-6 bg-slate-100 p-5 rounded-2xl">
+                <svg class="w-16 h-16 text-slate-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 text-slate-900 tracking-tight">Bússola Presidencial 2026</h1>
+            <p class="text-slate-600 mb-10 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+                Descubra qual candidato à presidência do Brasil em 2026 tem o perfil mais alinhado às suas ideias. Responda 30 perguntas sobre economia, costumes e sociedade.
+            </p>
+            <button onclick="startQuiz()" class="bg-indigo-600 text-white font-semibold py-4 px-12 rounded-xl shadow-lg shadow-indigo-200 hover:bg-indigo-700 hover:shadow-indigo-300 transition-all text-lg flex items-center gap-2">
+                <span>Iniciar o Teste</span>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            </button>
+        </section>
+
+        <!-- Tela do Questionário -->
+        <section id="quiz-screen" class="hidden p-6 md:p-12 min-h-[600px] flex-col justify-between">
+            <div>
+                <div class="w-full bg-slate-100 rounded-full h-2.5 mb-8 overflow-hidden">
+                    <div id="progress-bar" class="bg-indigo-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+                
+                <div class="flex justify-between items-center mb-6">
+                    <p class="text-sm font-bold text-indigo-600 tracking-widest uppercase" id="question-counter">Pergunta 1 de 30</p>
+                </div>
+                <h2 class="text-2xl md:text-3xl font-semibold text-slate-800 mb-10 leading-snug min-h-[120px]" id="question-text">
+                    <!-- A pergunta será inserida via JS -->
+                </h2>
+            </div>
+
+            <div class="flex flex-col gap-4 mt-auto" id="options-container">
+                <button onclick="handleAnswer(1)" class="btn-option w-full py-5 px-6 bg-white hover:bg-emerald-50 text-slate-800 font-medium rounded-2xl text-left border-2 border-slate-200 hover:border-emerald-400 flex items-center justify-between group text-lg">
+                    <span>Concordo Plenamente</span>
+                    <span class="text-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity">✓</span>
+                </button>
+                <button onclick="handleAnswer(0)" class="btn-option w-full py-5 px-6 bg-white hover:bg-slate-50 text-slate-800 font-medium rounded-2xl text-left border-2 border-slate-200 hover:border-slate-400 flex items-center justify-between group text-lg">
+                    <span>Neutro / Não sei</span>
+                    <span class="text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity">○</span>
+                </button>
+                <button onclick="handleAnswer(-1)" class="btn-option w-full py-5 px-6 bg-white hover:bg-rose-50 text-slate-800 font-medium rounded-2xl text-left border-2 border-slate-200 hover:border-rose-400 flex items-center justify-between group text-lg">
+                    <span>Discordo Totalmente</span>
+                    <span class="text-rose-500 opacity-0 group-hover:opacity-100 transition-opacity">✕</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Tela de Resultados -->
+        <section id="result-screen" class="hidden h-[90vh] md:h-auto md:max-h-[85vh] overflow-y-auto custom-scrollbar bg-slate-50">
+            <div class="p-8 md:p-12">
+                
+                <div class="text-center mb-10">
+                    <p class="text-sm uppercase tracking-widest font-bold text-slate-500 mb-2">Maior Afinidade</p>
+                    <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-2" id="top-candidate-name">Candidato</h1>
+                    <h3 class="text-xl md:text-2xl font-medium text-slate-600" id="top-party-name">Partido</h3>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200 mb-8">
+                    <h4 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2 border-b border-slate-100 pb-4">
+                        <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                        Seu Ranking Completo (2026)
+                    </h4>
+                    
+                    <div id="ranking-container" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <!-- O ranking será gerado dinamicamente via JS -->
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <button onclick="location.reload()" class="bg-slate-800 text-white font-bold py-4 px-10 rounded-xl shadow hover:bg-slate-900 transition-colors inline-flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                        Refazer Teste
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        /* 
+           Sistema Bidimensional (Eixo Econômico x Eixo Social)
+           Eixo Econômico (econ): -1 (Mais intervenção estatal) a +1 (Mais livre mercado)
+           Eixo Social (soc): -1 (Mais progressista/liberal nos costumes) a +1 (Mais conservador/tradicional)
+        */
+
+        const questions = [
+            // Eixo predominantemente econômico
+            { text: "Empresas estatais (Petrobras, Correios) devem ser privatizadas para aumentar a eficiência.", econ: 1, soc: 0 },
+            { text: "O Estado deve intervir na economia para garantir o desenvolvimento e reduzir desigualdades.", econ: -1, soc: 0 },
+            { text: "Programas de transferência de renda (como o Bolsa Família) devem ser o pilar principal do combate à pobreza.", econ: -1, soc: -0.2 },
+            { text: "É necessária a criação de impostos maiores sobre grandes fortunas, lucros e dividendos.", econ: -1, soc: 0 },
+            { text: "A legislação trabalhista deve ser mais flexível para reduzir os custos dos empregadores.", econ: 1, soc: 0 },
+            { text: "A educação e a saúde pública devem receber mais investimentos, mesmo que isso signifique estourar o teto de gastos.", econ: -1, soc: 0 },
+            { text: "O Banco Central deve ser totalmente independente, blindado contra interferências políticas.", econ: 1, soc: 0 },
+            { text: "A reforma agrária deve ser promovida de forma ativa pelo Estado.", econ: -1, soc: -0.5 },
+            { text: "O teto de gastos e a responsabilidade fiscal rigorosa são essenciais para o país.", econ: 1, soc: 0 },
+            { text: "Sindicatos de trabalhadores são fundamentais para equilibrar as relações de trabalho.", econ: -1, soc: 0 },
+            { text: "A redução geral de impostos corporativos é a forma mais eficaz de aquecer a economia.", econ: 1, soc: 0 },
+            { text: "A Petrobras deve usar parte de seus lucros para forçar a redução do preço dos combustíveis internamente.", econ: -1, soc: 0 },
+            { text: "Deve-se quebrar monopólios estatais em serviços de saneamento básico e energia.", econ: 1, soc: 0 },
+            
+            // Eixo predominantemente social/costumes
+            { text: "Cidadãos sem antecedentes criminais devem ter direito facilitado de adquirir armas de fogo para defesa.", econ: 0, soc: 1 },
+            { text: "A maioridade penal deve ser reduzida, garantindo punições mais rígidas para jovens infratores.", econ: 0, soc: 1 },
+            { text: "A demarcação de terras indígenas deve ser acelerada e protegida de forma irrestrita pelo Estado.", econ: 0, soc: -1 },
+            { text: "O agronegócio não deve ser limitado por regulações ambientais consideradas excessivas.", econ: 0.5, soc: 0.8 },
+            { text: "O modelo de escolas cívico-militares ajuda a melhorar a disciplina no ensino básico.", econ: 0, soc: 1 },
+            { text: "As cotas raciais e sociais em universidades públicas são uma política de reparação justa e necessária.", econ: 0, soc: -1 },
+            { text: "A exploração econômica (mineração/agro) em áreas ambientalmente protegidas deve ser permitida.", econ: 0.5, soc: 1 },
+            { text: "O Estado deve criar políticas ativas específicas de proteção para a população LGBTQIA+.", econ: 0, soc: -1 },
+            { text: "Policiais que causam mortes durante operações de combate ao crime devem ter maior proteção jurídica (excludente de ilicitude).", econ: 0, soc: 1 },
+            { text: "Valores religiosos e familiares tradicionais devem guiar as políticas de educação pública.", econ: 0, soc: 1 },
+            { text: "O sistema prisional falha ao não priorizar a ressocialização frente à punição física ou exclusão.", econ: 0, soc: -1 },
+            { text: "O sistema de votação eleitoral exige mecanismos adicionais como o voto impresso auditável.", econ: 0, soc: 1 },
+            { text: "A descriminalização das drogas e tratá-las como questão de saúde pública reduziria a violência.", econ: 0, soc: -1 },
+            { text: "Movimentos sociais que ocupam propriedades devem ser tratados com rigor pela força policial.", econ: 0.5, soc: 1 },
+            { text: "Plataformas de internet devem ser rigorosamente reguladas pelo Estado para combater fake news.", econ: 0, soc: -1 },
+            { text: "O aborto deveria ser tratado como uma questão de saúde pública, permitindo o procedimento legalmente.", econ: 0, soc: -1 },
+            { text: "Casais homoafetivos devem ter exatamente os mesmos direitos legais de adoção que casais heterossexuais.", econ: 0, soc: -1 }
+        ];
+
+        const candidates = [
+            { id: 'lula', name: "Lula", party: "PT", econ: -0.6, soc: -0.5, colorClass: "color-pt" },
+            { id: 'flavio', name: "Flávio Bolsonaro", party: "PL", econ: 0.7, soc: 0.9, colorClass: "color-pl" },
+            { id: 'zema', name: "Zema", party: "NOVO", econ: 0.9, soc: 0.2, colorClass: "color-novo" },
+            { id: 'caiado', name: "Ronaldo Caiado", party: "PSD", econ: 0.4, soc: 0.6, colorClass: "color-psd" },
+            { id: 'cury', name: "Escritor Augusto Cury", party: "AVANTE", econ: 0.0, soc: 0.0, colorClass: "color-avante" },
+            { id: 'avalanche', name: "Leonardo Avalanche", party: "PRTB", econ: 0.6, soc: 0.8, colorClass: "color-prtb" },
+            { id: 'renan', name: "Renan Santos", party: "MISSÃO", econ: 0.8, soc: -0.2, colorClass: "color-missao" },
+            { id: 'wilson', name: "Veterinário Wilson Grassi", party: "DEMOCRATA", econ: 0.2, soc: -0.1, colorClass: "color-democrata" },
+            { id: 'clariana', name: "Clariana Barão", party: "DC", econ: 0.3, soc: 0.8, colorClass: "color-dc" },
+            { id: 'edmilson', name: "Edmilson Costa", party: "PCB", econ: -0.9, soc: -0.8, colorClass: "color-pcb" },
+            { id: 'hertz', name: "Hertz Dias", party: "PSTU", econ: -1.0, soc: -0.7, colorClass: "color-pstu" },
+            { id: 'rui', name: "Rui Costa Pimenta", party: "PCO", econ: -1.0, soc: 0.4, colorClass: "color-pco" },
+            { id: 'samara', name: "Samara", party: "UP", econ: -1.0, soc: -0.8, colorClass: "color-up" }
+        ];
+
+        let currentQuestionIndex = 0;
+        
+        // Pontuações acumuladas do usuário
+        let userEconScore = 0;
+        let userSocScore = 0;
+        
+        // Máximos possíveis para normalização (calculados na inicialização)
+        let maxEcon = 0;
+        let maxSoc = 0;
+
+        const introScreen = document.getElementById('intro-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const questionText = document.getElementById('question-text');
+        const questionCounter = document.getElementById('question-counter');
+        const progressBar = document.getElementById('progress-bar');
+        
+        // Calcular pesos máximos
+        questions.forEach(q => {
+            maxEcon += Math.abs(q.econ);
+            maxSoc += Math.abs(q.soc);
+        });
+
+        function startQuiz() {
+            introScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            quizScreen.classList.add('flex', 'fade-in');
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            questionText.classList.remove('fade-in');
+            void questionText.offsetWidth; // Force reflow
+            questionText.classList.add('fade-in');
+
+            const q = questions[currentQuestionIndex];
+            questionText.textContent = q.text;
+            questionCounter.textContent = `Pergunta ${currentQuestionIndex + 1} de ${questions.length}`;
+            
+            const progress = (currentQuestionIndex / questions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+
+        function handleAnswer(value) {
+            // value = 1 (Concordo), 0 (Neutro), -1 (Discordo)
+            const q = questions[currentQuestionIndex];
+            
+            userEconScore += (q.econ * value);
+            userSocScore += (q.soc * value);
+
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex < questions.length) {
+                renderQuestion();
+            } else {
+                calculateResults();
+            }
+        }
+
+        function calculateResults() {
+            // Normalizar a posição do usuário para a escala de -1 a +1
+            const userNormEcon = userEconScore / maxEcon;
+            const userNormSoc = userSocScore / maxSoc;
+
+            const maxDistance = 2.828;
+
+            let ranking = candidates.map(cand => {
+                const diffEcon = userNormEcon - cand.econ;
+                const diffSoc = userNormSoc - cand.soc;
+                const distance = Math.sqrt((diffEcon * diffEcon) + (diffSoc * diffSoc));
+                
+                let affinityRaw = 100 - ((distance / (maxDistance * 0.75)) * 100);
+                let affinity = Math.max(0, Math.min(100, affinityRaw));
+
+                return {
+                    ...cand,
+                    affinity: Math.round(affinity)
+                };
+            });
+
+            ranking.sort((a, b) => b.affinity - a.affinity);
+            
+            renderResultsUI(ranking, userNormEcon, userNormSoc);
+        }
+
+        function renderResultsUI(ranking, userEcon, userSoc) {
+            quizScreen.classList.add('hidden');
+            quizScreen.classList.remove('flex');
+            resultScreen.classList.remove('hidden');
+            resultScreen.classList.add('block', 'fade-in');
+
+            // Lógica de cores dinâmicas baseada na inclinação
+            const themeScore = userEcon + userSoc;
+            resultScreen.classList.remove('bg-slate-50', 'bg-blue-50', 'bg-red-50', 'bg-purple-50');
+            
+            if (themeScore > 0.4) {
+                resultScreen.classList.add('bg-blue-50'); // Mais alinhado à direita
+            } else if (themeScore < -0.4) {
+                resultScreen.classList.add('bg-red-50'); // Mais alinhado à esquerda
+            } else {
+                resultScreen.classList.add('bg-purple-50'); // Mais ao centro
+            }
+
+            // Preencher Top 1
+            const topCandidate = ranking[0];
+            document.getElementById('top-candidate-name').textContent = topCandidate.name;
+            document.getElementById('top-party-name').textContent = topCandidate.party;
+
+            // Preencher a lista do Ranking
+            const container = document.getElementById('ranking-container');
+            container.innerHTML = '';
+
+            ranking.forEach((cand, index) => {
+                const row = document.createElement('div');
+                row.className = 'w-full bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex flex-col justify-center';
+                
+                const opacityClass = index > 5 ? 'opacity-80 hover:opacity-100 transition-opacity' : '';
+
+                row.innerHTML = `
+                    <div class="flex justify-between items-end mb-2 ${opacityClass}">
+                        <div>
+                            <span class="text-slate-400 font-mono text-sm mr-1">#${index + 1}</span>
+                            <span class="font-bold text-slate-800 text-sm sm:text-base">${cand.name}</span>
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 ml-1 border border-slate-200">${cand.party}</span>
+                        </div>
+                        <span class="font-bold text-slate-700 text-sm sm:text-base">${cand.affinity}%</span>
+                    </div>
+                    <div class="w-full bg-slate-100 rounded-full h-2 ${opacityClass}">
+                        <div class="${cand.colorClass} h-2 rounded-full transition-all duration-1000 ease-out" style="width: 0%" data-target-width="${cand.affinity}%"></div>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+
+            setTimeout(() => {
+                const bars = container.querySelectorAll('[data-target-width]');
+                bars.forEach(bar => {
+                    bar.style.width = bar.getAttribute('data-target-width');
+                });
+            }, 150);
+        }
+    </script>
+</body>
+</html>
